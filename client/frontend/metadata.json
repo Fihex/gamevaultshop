@@ -1,0 +1,5 @@
+{
+  "name": "Game Vault",
+  "description": "A premium game store and management platform featuring infinite scrolling, dynamic filters, cart system, and a comprehensive admin dashboard for managing games, users, and publisher categories. Includes Spring Boot backend source files.",
+  "requestFramePermissions": []
+}

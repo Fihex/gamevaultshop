@@ -1,0 +1,62 @@
+// ... inside game_controller.go
+
+func UpdateGame(c *gin.Context) {
+	var game models.Game
+	if err := database.DB.First(&game, c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Game not found"})
+		return
+	}
+
+	// Keep a copy of old images before binding new data
+	oldImages := game.Images
+
+	var input models.Game
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// --- START OF FIX ---
+	// Loop through old images to find ones missing in the new input.Images list
+	for _, oldImg := range oldImages {
+		found := false
+		for _, newImg := range input.Images {
+			if oldImg == newImg {
+				found = true
+				break
+			}
+		}
+
+		// If not found in the new list, delete from disk
+		if !found {
+			if strings.Contains(oldImg, "/api/images/") {
+				parts := strings.Split(oldImg, "/")
+				if len(parts) > 0 {
+					filename := parts[len(parts)-1]
+					// Assuming "uploads/" is your storage directory based on your UploadImage function
+					err := os.Remove("uploads/" + filename)
+					if err != nil {
+						// Log error, but proceed
+						// fmt.Println("Failed to delete orphaned image:", err)
+					}
+				}
+			}
+		}
+	}
+	// --- END OF FIX ---
+
+	// Update fields
+	game.Title = input.Title
+	game.Description = input.Description
+	game.Price = input.Price
+	game.Quantity = input.Quantity
+	game.Images = input.Images // Updates the DB references
+	game.IsArchived = input.IsArchived
+
+	// Clear old categories and replace
+	database.DB.Model(&game).Association("Categories").Replace(input.Categories)
+
+	database.DB.Save(&game)
+	LogAudit(GetUsername(c), "UPDATE_GAME", "Updated game: "+game.Title, strconv.Itoa(int(game.ID)))
+	c.JSON(http.StatusOK, game)
+}

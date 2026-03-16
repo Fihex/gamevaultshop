@@ -1,0 +1,271 @@
+package com.gamevault.controller;
+
+import com.gamevault.entity.Category;
+import com.gamevault.entity.Game;
+import com.gamevault.repository.CategoryRepository;
+import com.gamevault.repository.GameRepository;
+import com.gamevault.service.AuditService;
+import com.gamevault.service.FileStorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.criteria.Predicate; // Ensure you have this (or javax.persistence.criteria.Predicate for older Spring Boot)
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api/games")
+public class GameController {
+
+    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+
+    @Autowired
+    private GameRepository gameRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private AuditService auditService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    @GetMapping
+    public Page<Game> getGames(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) List<Long> categories,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) Integer minStock,
+            @RequestParam(required = false) Integer maxStock,
+            @RequestParam(required = false) String availability,
+            @RequestParam(required = false, defaultValue = "false") Boolean archived,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir
+    ) {
+        Sort.Direction dir = sortDir.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, sortBy));
+
+        Specification<Game> spec = Specification.where(null);
+
+        // Filter by Archive Status
+        if (archived != null) {
+            if (archived) {
+                spec = spec.and((root, query, cb) -> cb.equal(root.get("isArchived"), true));
+            } else {
+                spec = spec.and((root, query, cb) -> cb.or(
+                    cb.equal(root.get("isArchived"), false),
+                    cb.isNull(root.get("isArchived"))
+                ));
+            }
+        }
+
+        // Updated Search Logic (Title OR ID)
+        if (search != null && !search.isEmpty()) {
+            spec = spec.and((root, query, cb) -> {
+                String searchPattern = "%" + search.toLowerCase() + "%";
+                Predicate titlePredicate = cb.like(cb.lower(root.get("title")), searchPattern);
+
+                try {
+                    // Try to parse the search string as an ID
+                    long id = Long.parseLong(search);
+                    Predicate idPredicate = cb.equal(root.get("id"), id);
+                    // Return records matching Title OR ID
+                    return cb.or(titlePredicate, idPredicate);
+                } catch (NumberFormatException e) {
+                    // If not a number, search by title only
+                    return titlePredicate;
+                }
+            });
+        }
+
+        // Grouped AND Filtering for Categories
+        if (categories != null && !categories.isEmpty()) {
+            List<Category> selectedCats = categoryRepository.findAllById(categories);
+            Map<String, List<Long>> grouped = selectedCats.stream()
+                .collect(Collectors.groupingBy(Category::getType, Collectors.mapping(Category::getId, Collectors.toList())));
+
+            for (List<Long> ids : grouped.values()) {
+                 spec = spec.and((root, query, cb) -> {
+                     query.distinct(true);
+                     return root.join("categories").get("id").in(ids);
+                 });
+            }
+        }
+
+        if (minPrice != null) {
+            spec = spec.and((root, query, cb) -> cb.ge(root.get("price"), minPrice));
+        }
+
+        if (maxPrice != null) {
+            spec = spec.and((root, query, cb) -> cb.le(root.get("price"), maxPrice));
+        }
+
+        if (minStock != null) {
+            spec = spec.and((root, query, cb) -> cb.ge(root.get("quantity"), minStock));
+        }
+
+        if (maxStock != null) {
+            spec = spec.and((root, query, cb) -> cb.le(root.get("quantity"), maxStock));
+        }
+
+        if (availability != null && !availability.isEmpty()) {
+            if ("IN_STOCK".equalsIgnoreCase(availability)) {
+                spec = spec.and((root, query, cb) -> cb.gt(root.get("quantity"), 0));
+            } else if ("OUT_OF_STOCK".equalsIgnoreCase(availability)) {
+                spec = spec.and((root, query, cb) -> cb.equal(root.get("quantity"), 0));
+            }
+        }
+
+        return gameRepository.findAll(spec, pageable);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Game> getGameById(@PathVariable Long id) {
+        return gameRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<?> createGame(@RequestBody Game game) {
+        try {
+            if (game.getCategories() != null && !game.getCategories().isEmpty()) {
+                List<Long> catIds = game.getCategories().stream()
+                        .map(Category::getId)
+                        .collect(Collectors.toList());
+                List<Category> managedCats = categoryRepository.findAllById(catIds);
+                game.setCategories(managedCats);
+            } else {
+                game.setCategories(new ArrayList<>());
+            }
+
+            if (game.getIsArchived() == null) {
+                game.setIsArchived(false);
+            }
+
+            Game saved = gameRepository.save(game);
+            auditService.log("CREATE_GAME", "Created new game: " + saved.getTitle(), String.valueOf(saved.getId()));
+            return ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            logger.error("Error creating game", e);
+            return ResponseEntity.internalServerError().body("Error creating game: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<?> updateGame(@PathVariable Long id, @RequestBody Game gameDetails) {
+        try {
+            return gameRepository.findById(id)
+                    .map(game -> {
+                        // 1. Handle Image Deletion Logic
+                        if (gameDetails.getImages() != null) {
+                            List<String> oldImages = game.getImages();
+                            List<String> newImages = gameDetails.getImages();
+
+                            // If oldImages is not null, find which ones are missing in newImages
+                            if (oldImages != null) {
+                                for (String oldImg : oldImages) {
+                                    // If the new list does not contain the old image, delete the file
+                                    if (!newImages.contains(oldImg)) {
+                                        // Check if it is a local file served by us
+                                        if (oldImg.contains("/api/images/")) {
+                                            try {
+                                                String fileName = oldImg.substring(oldImg.lastIndexOf("/") + 1);
+                                                fileStorageService.deleteFile(fileName);
+                                                logger.info("Deleted orphaned file: " + fileName);
+                                            } catch (Exception e) {
+                                                logger.error("Failed to delete orphaned file: " + oldImg, e);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            // Update the DB reference
+                            game.setImages(gameDetails.getImages());
+                        }
+
+                        game.setTitle(gameDetails.getTitle());
+                        game.setDescription(gameDetails.getDescription());
+                        game.setPrice(gameDetails.getPrice());
+                        game.setQuantity(gameDetails.getQuantity());
+                        game.setIsArchived(gameDetails.getIsArchived());
+
+                        if (gameDetails.getImages() != null) {
+                            game.setImages(gameDetails.getImages());
+                        }
+
+                        if (gameDetails.getCategories() != null) {
+                            List<Long> catIds = gameDetails.getCategories().stream()
+                                    .map(Category::getId)
+                                    .collect(Collectors.toList());
+                            List<Category> managedCats = categoryRepository.findAllById(catIds);
+                            game.setCategories(new ArrayList<>(managedCats));
+                        } else {
+                            game.getCategories().clear();
+                        }
+
+                        Game updated = gameRepository.save(game);
+                        auditService.log("UPDATE_GAME", "Updated game: " + updated.getTitle(), String.valueOf(updated.getId()));
+                        return ResponseEntity.ok(updated);
+                    })
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            logger.error("Error updating game " + id, e);
+            return ResponseEntity.internalServerError().body("Error updating game: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<?> deleteGame(@PathVariable Long id) {
+        try {
+            return gameRepository.findById(id)
+                    .map(game -> {
+                        String title = game.getTitle();
+
+                        if (game.getImages() != null) {
+                            for (String imageUrl : game.getImages()) {
+                                try {
+                                    String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+                                    fileStorageService.deleteFile(fileName);
+                                } catch (Exception e) {
+                                    // Ignore
+                                }
+                            }
+                        }
+
+                        game.setCategories(null);
+                        gameRepository.save(game);
+
+                        gameRepository.deleteById(id);
+                        auditService.log("DELETE_GAME", "Deleted game: " + title, String.valueOf(id));
+                        return ResponseEntity.ok().build();
+                    })
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            logger.error("Error deleting game " + id, e);
+            return ResponseEntity.internalServerError().body("Error deleting game: " + e.getMessage());
+        }
+    }
+}

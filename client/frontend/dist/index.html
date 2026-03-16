@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/assets/logo-CC7emviT.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discount Games</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              vault: {
+                950: '#020617',
+                900: '#0f172a',
+                800: '#1e293b',
+                700: '#334155',
+                accent: '#8b5cf6', // Violet
+                accentHover: '#7c3aed',
+                secondary: '#10b981', // Emerald
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+
+      /* Fix for autofill white background */
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus,
+      input:-webkit-autofill:active{
+          -webkit-box-shadow: 0 0 0 30px #1e293b inset !important;
+          -webkit-text-fill-color: white !important;
+      }
+
+      /* Robust Text Wrapping */
+      .force-wrap {
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+        white-space: pre-wrap;
+      }
+
+      /* Flex child fix */
+      .min-w-0 {
+        min-width: 0;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-C09KzXwh.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/excel-Bdvyopiw.js">
+    <link rel="modulepreload" crossorigin href="/assets/ui-vendor-BA32w1ww.js">
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-Dzk660Vg.js">
+    <link rel="modulepreload" crossorigin href="/assets/router-CDYUSYw4.js">
+    <link rel="modulepreload" crossorigin href="/assets/lucide-DUAt-T8N.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-CmPTMozH.css">
+  </head>
+  <body class="bg-vault-950 text-white">
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,967 @@
+    1  sudo apt update && sudo apt upgrade -y
+    2  sudo apt install postgresql postgresql-contrib nginx certbot
+    3  python3-certbot-nginx ufw -y
+    4  sudo apt install postgresql postgresql-contrib nginx certbot python3-certbot-nginx ufw -y
+    5  sudo -u postgres psql
+    6  sudo apt install openjdk-17-jdk -y
+    7  sudo apt install maven -y
+    8  mkdir /var/www/gamevault/backend
+    9  sudo mkdir -p /var/www/gamevault/backend
+   10  wget https://go.dev/dl/go1.21.6.linux-amd64.tar.gz
+   11  sudo apt install wget
+   12  wget https://go.dev/dl/go1.21.6.linux-amd64.tar.gz
+   13  sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz
+   14  echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.profile
+   15  go version
+   16  cd /var/www/gamevault/server/gobackend
+   17  go mod tidy
+   18  go build -o gamevault-api main.go
+   19  sudo nano /etc/systemd/system/gamevault-go-backend.service
+   20  sudo systemctl enable gamevault-go-backend
+   21  sudo systemctl start gamevault-go-backend
+   22  cd /var/www/gamevault/client/frontend
+   23  curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+   24  sudo apt install -y nodejs
+   25  node -v
+   26  nano constants.ts
+   27  npm install
+   28  npm run build
+   29  sudo nano /etc/nginx/sites-available/gamevault
+   30  sudo ln -s /etc/nginx/sites-available/gamevault /etc/nginx/sites-enabled/
+   31  sudo rm /etc/nginx/sites-enabled/default
+   32  sudo systemctl restart nginx
+   33  sudo systemctl restart gamevault-go-backend
+   34  sudo systemctl restart nginx
+   35  sudo systemctl journal  gamevault-go-backend
+   36  sudo journalctl -u gamevault-go-backend -n 100 --no-pager
+   37  cd /var/www/gamevault/server/gobackend
+   38  go build -o gamevault-api main.go
+   39  sudo systemctl restart gamevault-go-backend
+   40  sudo systemctl journal  gamevault-go-backend
+   41  sudo journalctl -u gamevault-backend -n 100 --no-pager
+   42  sudo journalctl -u gamevault-go-backend -n 100 --no-pager
+   43  sudo systemctl stop gamevault-go-backend
+   44  go build -o gamevault-api main.go
+   45  sudo systemctl restart gamevault-go-backend
+   46  sudo journalctl -u gamevault-go-backend -n 100 --no-pager
+   47  sudo -i -u postgres psql   
+   48  reboot
+   49  sudo -u postgres psql
+   50  sudo systemctl stop gamevault-go-backend
+   51  sudo -u postgres psql
+   52  \du   
+   53  sudo -u postgres psql
+   54  REASSIGN OWNED BY vaultuser TO postgres;   
+   55  sudo -u postgres psql
+   56  sudo systemctl start gamevault-go-backend
+   57  sudo systemctl start nginx
+   58  sudo journalctl -u gamevault-go-backend -n 100 --no-pager
+   59  sudo -u postgres psql
+   60  sudo systemctl restart gamevault-go-backend
+   61  sudo journalctl -u gamevault-go-backend -n 100 --no-pager
+   62  sudo systemctl restart gamevault-go-backend
+   63  sudo journalctl -u gamevault-go-backend -n 100 --no-pager
+   64  sudo nano /etc/nginx/sites-available/gamevault
+   65  sudo journalctl -u gamevault-go-backend -n 100 --no-pager
+   66  sudo -u postgres psql
+   67  sudo systemctl restart gamevault-go-backend
+   68  sudo nano /etc/nginx/nginx.conf
+   69  sudo nano /etc/nginx/nginx.conf
+   70  netstat -napt | grep 443
+   71  ss -tlpn | grep 443
+   72  sudo netstat -napt | grep 443
+   73  sudo nano /etc/nginx/nginx.conf
+   74  nginx -t
+   75  sudo nano /etc/nginx/nginx.conf
+   76  sudo -u postgres psql -d gamevault
+   77  sudo nano /path/to/domain.crt
+   78  mkdir /path/to/
+   79  mkdir /etc/ssl/
+   80  cd /etc/ssl/
+   81  ls
+   82  cd private/
+   83  ls
+   84  sudo nano domain.key
+   85  cd ../
+   86  ls
+   87  cd certs/
+   88  ls
+   89  cd ..
+   90  cd private/
+   91  sudo nano domain.key
+   92  cd ..
+   93  cd certs/
+   94  sudo nano domain.crt
+   95  nginx -t
+   96  sudo nano /etc/nginx/nginx.conf
+   97  nginx -t
+   98  sudo nano domain.crt
+   99  sudo rm domain.crt
+  100  ls
+  101  sudo nano domain.crt
+  102  sudo mkdir -p /etc/nginx/ssl
+  103  sudo mv bundle.crt /etc/nginx/ssl/
+  104  sudo mv domain.crt /etc/nginx/ssl/
+  105  cd ..
+  106  cd private/
+  107  ls
+  108  lssudo mv domain.key /etc/nginx/ssl/
+  109  sudo mv domain.key /etc/nginx/ssl/
+  110  ls
+  111  ls /etc/nginx/ssl/
+  112  sudo nano /etc/nginx/nginx.conf
+  113  sudo nano /etc/nginx/sites-available/gamevault
+  114  sudo nginx -t
+  115  sudo nano /etc/nginx/sites-available/gamevault
+  116  sudo nginx -t
+  117  sudo systemctl restart nginx
+  118  cd /var/www/gamevault/client/frontend
+  119  npm run build
+  120  sudo systemctl restart nginx
+  121  npm run build
+  122  sudo systemctl restart nginx
+  123  cd /var/www/gamevault/client/frontend
+  124  npm install xlsx
+  125  sudo systemctl restart nginx
+  126  npm run build
+  127  sudo systemctl restart nginx
+  128  npm run build
+  129  sudo systemctl restart nginx
+  130  npm run build
+  131  sudo systemctl restart nginx
+  132  npm run build
+  133  sudo systemctl restart nginx
+  134  npm run build
+  135  sudo systemctl restart nginx
+  136  npm run build
+  137  sudo systemctl restart nginx
+  138  npm run build
+  139  sudo systemctl restart nginx
+  140  npm run build
+  141  sudo systemctl restart nginx
+  142  npm run build
+  143  sudo systemctl restart nginx
+  144  npm run build
+  145  sudo systemctl restart nginx
+  146  npm run build
+  147  sudo systemctl restart nginx
+  148  npm run build
+  149  sudo systemctl restart nginx
+  150  cd /var/www/gamevault/client/frontend
+  151  npm run build
+  152  cd /var/www/gamevault/client/frontend
+  153  sudo systemctl restart nginx
+  154  cd /var/www/gamevault/client/frontend
+  155  npm run build
+  156  sudo systemctl restart nginx
+  157  npm run build
+  158  sudo systemctl restart nginx
+  159  npm run build
+  160  sudo systemctl restart nginx
+  161  npm run build
+  162  sudo systemctl restart nginx
+  163  npm run build
+  164  sudo systemctl restart nginx
+  165  npm run build
+  166  sudo systemctl restart nginx
+  167  npm run build
+  168  sudo systemctl restart nginx
+  169  npm run build
+  170  sudo systemctl restart nginx
+  171  npm run build
+  172  sudo systemctl restart nginx
+  173  npm run build
+  174  sudo systemctl restart nginx
+  175  npm run build
+  176  sudo systemctl restart nginx
+  177  npm run build
+  178  sudo systemctl restart nginx
+  179  npm run build
+  180  sudo systemctl restart nginx
+  181  npm run build
+  182  sudo systemctl restart nginx
+  183  npm run build
+  184  sudo systemctl restart nginx
+  185  npm run build
+  186  sudo systemctl restart nginx
+  187  npm run build
+  188  sudo systemctl restart nginx
+  189  npm run build
+  190  sudo systemctl restart nginx
+  191  npm run build
+  192  sudo systemctl restart nginx
+  193  npm run build
+  194  sudo systemctl restart nginx
+  195  npm run build
+  196  sudo systemctl restart nginx
+  197  npm run build
+  198  sudo systemctl restart nginx
+  199  npm run build
+  200  sudo systemctl restart nginx
+  201  cd /var/www/gamevault/client/frontend
+  202  npm run build
+  203  cd /var/www/gamevault/client/frontend
+  204  npm run build
+  205  cd /var/www/gamevault/client/frontend
+  206  npm run build
+  207  sudo systemctl restart nginx
+  208  npm run build
+  209  sudo systemctl restart nginx
+  210  npm run build
+  211  sudo systemctl restart nginx
+  212  npm run build
+  213  sudo systemctl restart nginx
+  214  npm run build
+  215  sudo systemctl restart nginx
+  216  npm run build
+  217  sudo systemctl restart nginx
+  218  npm run build
+  219  sudo systemctl restart nginx
+  220  npm run build
+  221  sudo systemctl restart nginx
+  222  npm run build
+  223  sudo systemctl restart nginx
+  224  npm run build
+  225  sudo systemctl restart nginx
+  226  npm run build
+  227  sudo systemctl restart nginx
+  228  npm run build
+  229  sudo systemctl restart nginx
+  230  npm run build
+  231  sudo systemctl restart nginx
+  232  npm run build
+  233  sudo systemctl restart nginx
+  234  npm run build
+  235  sudo systemctl restart nginx
+  236  npm run build
+  237  sudo systemctl restart nginx
+  238  npm run build
+  239  sudo systemctl restart nginx
+  240  npm run build
+  241  sudo systemctl restart nginx
+  242  npm run build
+  243  sudo systemctl restart nginx
+  244  npm run build
+  245  sudo systemctl restart nginx
+  246  npm run build
+  247  sudo systemctl restart nginx
+  248  du -sh /var/www/gamevault/server/gobackend/uploads/
+  249  sudo systemctl restart nginx
+  250  npm run build
+  251  sudo systemctl restart nginx
+  252  npm run build
+  253  sudo systemctl restart nginx
+  254  npm run build
+  255  sudo systemctl restart nginx
+  256  npm run build
+  257  sudo systemctl restart nginx
+  258  cd /var/www/gamevault/client/frontend
+  259  npm run build
+  260  sudo systemctl restart nginx
+  261  cd /var/www/gamevault/client/frontend
+  262  npm run build
+  263  cd /var/www/gamevault/client/frontend
+  264  sudo systemctl restart nginx
+  265  npm run build
+  266  sudo systemctl restart nginx
+  267  ls
+  268  sudo systemctl edit --full gamevault-backend
+  269  sudo systemctl edit --full gamevault-go-backend
+  270  sudo systemctl restart gamevault-go-backend
+  271  sudo journalctl -u gamevault-go-backend -n 1000 --no-pager
+  272  cd /var/www/gamevault/client/frontend
+  273  npm run build
+  274  sudo systemctl restart nginx
+  275  npm run build
+  276  sudo systemctl restart nginx
+  277  npm run build
+  278  sudo systemctl restart nginx
+  279  npm run build
+  280  sudo systemctl restart nginx
+  281  ffmpeg
+  282  cd /var/www/gamevault/client/frontend
+  283  npm install react@latest react-dom@latest
+  284  npm uninstall xlsx
+  285  npm install https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+  286  npm audit
+  287  npm run build
+  288  sudo systemctl restart nginx
+  289  npm run build
+  290  sudo systemctl restart nginx
+  291  cd /var/www/gamevault/client/frontend
+  292  npm uninstall xlsx xlsx-js-style exceljs
+  293  npm install write-excel-file
+  294  npm run build
+  295  npm install write-excel-file
+  296  npm run build
+  297  sudo systemctl restart nginx
+  298  npm run build
+  299  sudo systemctl restart nginx
+  300  npm run build
+  301  sudo systemctl restart nginx
+  302  npm run build
+  303  sudo systemctl restart nginx
+  304  cd /var/www/gamevault/client/frontend
+  305  npm run build
+  306  sudo systemctl restart nginx
+  307  npm run build
+  308  cd /var/www/gamevault/client/frontend
+  309  npm run build
+  310  sudo systemctl restart nginx
+  311  npm run build
+  312  sudo systemctl restart nginx
+  313  npm run build
+  314  cd /var/www/gamevault/client/frontend
+  315  npm run build
+  316  sudo systemctl restart nginx
+  317  npm run build
+  318  sudo systemctl restart nginx
+  319  cd /var/www/gamevault/client/frontend
+  320  npm run build
+  321  sudo systemctl restart nginx
+  322  npm run build
+  323  cd /var/www/gamevault/client/frontend
+  324  npm run build
+  325  sudo systemctl restart nginx
+  326  npm run build
+  327  sudo systemctl restart nginx
+  328  npm run build
+  329  sudo systemctl restart nginx
+  330  npm run build
+  331  sudo systemctl restart nginx
+  332  npm run build
+  333  sudo systemctl restart nginx
+  334  npm run build
+  335  sudo systemctl restart nginx
+  336  npm run build
+  337  sudo systemctl restart nginx
+  338  npm run build
+  339  sudo systemctl restart nginx
+  340  npm run build
+  341  sudo systemctl restart nginx
+  342  npm run build
+  343  sudo systemctl restart nginx
+  344  npm run build
+  345  sudo systemctl restart nginx
+  346  npm run build
+  347  sudo systemctl restart nginx
+  348  npm run build
+  349  sudo systemctl restart nginx
+  350  npm run build
+  351  sudo systemctl restart nginx
+  352  npm run build
+  353  sudo systemctl restart nginx
+  354  npm run build
+  355  sudo systemctl restart nginx
+  356  npm run build
+  357  sudo systemctl restart nginx
+  358  npm run build
+  359  sudo systemctl restart nginx
+  360  npm run build
+  361  npm run build
+  362  sudo systemctl restart nginx
+  363  npm run build
+  364  sudo systemctl restart nginx
+  365  npm run build
+  366  sudo systemctl restart nginx
+  367  npm run build
+  368  sudo systemctl restart nginx
+  369  npm run build
+  370  sudo systemctl restart nginx
+  371  npm run build
+  372  sudo systemctl restart nginx
+  373  npm run build
+  374  sudo systemctl restart nginx
+  375  npm run build
+  376  sudo systemctl restart nginx
+  377  npm run build
+  378  sudo systemctl restart nginx
+  379  npm run build
+  380  sudo systemctl restart nginx
+  381  npm run build
+  382  sudo systemctl restart nginx
+  383  npm run build
+  384  sudo systemctl restart nginx
+  385  npm run build
+  386  sudo systemctl restart nginx
+  387  npm run build
+  388  sudo systemctl restart nginx
+  389  npm run build
+  390  sudo systemctl restart nginx
+  391  npm run build
+  392  sudo systemctl restart nginx
+  393  npm run build
+  394  sudo systemctl restart nginx
+  395  npm run build
+  396  sudo systemctl restart nginx
+  397  npm run build
+  398  sudo systemctl restart nginx
+  399  npm run build
+  400  sudo systemctl restart nginx
+  401  npm run build
+  402  sudo systemctl restart nginx
+  403  npm run build
+  404  sudo systemctl restart nginx
+  405  npm run build
+  406  sudo systemctl restart nginx
+  407  npm run build
+  408  sudo systemctl restart nginx
+  409  npm run build
+  410  sudo systemctl restart nginx
+  411  cd /var/www/gamevault/client/frontend
+  412  npx shadcn@latest init
+  413  npm install -D tailwindcss postcss autoprefixer
+  414  npm install tailwindcss-animate class-variance-authority clsx tailwind-merge @radix-ui/react-slot
+  415  npx shadcn@latest init
+  416  npx tailwindcss init -p
+  417  npx shadcn@latest init
+  418  npm run build
+  419  sudo systemctl restart nginx
+  420  npm run build
+  421  sudo systemctl restart nginx
+  422  npm run build
+  423  sudo systemctl restart nginx
+  424  npm run build
+  425  sudo systemctl restart nginx
+  426  npm run build
+  427  sudo systemctl restart nginx
+  428  npm run build
+  429  sudo systemctl restart nginx
+  430  npm run build
+  431  sudo systemctl restart nginx
+  432  npm run build
+  433  sudo systemctl restart nginx
+  434  npm run build
+  435  sudo systemctl restart nginx
+  436  npm run build
+  437  sudo systemctl restart nginx
+  438  npm run build
+  439  sudo systemctl restart nginx
+  440  npm run build
+  441  sudo systemctl restart nginx
+  442  npm run build
+  443  sudo systemctl restart nginx
+  444  cd /var/www/gamevault/client/frontend/
+  445  npm run build
+  446  sudo systemctl restart nginx
+  447  npm run build
+  448  sudo systemctl restart nginx
+  449  npm run build
+  450  sudo systemctl restart nginx
+  451  npm run build
+  452  sudo systemctl restart nginx
+  453  npm run build
+  454  sudo systemctl restart nginx
+  455  npm run build
+  456  sudo systemctl restart nginx
+  457  npm run build
+  458  sudo systemctl restart nginx
+  459  npm run build
+  460  sudo systemctl restart nginx
+  461  npm run build
+  462  sudo systemctl restart nginx
+  463  npm run build
+  464  cd /var/www/gamevault/client/frontend/
+  465  npm run build
+  466  cd /var/www/gamevault/client/frontend/
+  467  sudo systemctl restart nginx
+  468  npm run build
+  469  sudo systemctl restart nginx
+  470  npm run build
+  471  sudo systemctl restart nginx
+  472  npm run build
+  473  sudo systemctl restart nginx
+  474  npm run build
+  475  sudo systemctl restart nginx
+  476  npm run build
+  477  sudo systemctl restart nginx
+  478  npm run build
+  479  sudo systemctl restart nginx
+  480  npm run build
+  481  sudo systemctl restart nginx
+  482  npm run build
+  483  sudo systemctl restart nginx
+  484  npm run build
+  485  sudo systemctl restart nginx
+  486  npm run build
+  487  sudo systemctl restart nginx
+  488  npm run build
+  489  sudo systemctl restart nginx
+  490  npm run build
+  491  sudo systemctl restart nginx
+  492  npm run build
+  493  sudo systemctl restart nginx
+  494  npm run build
+  495  sudo systemctl restart nginx
+  496  npm run build
+  497  sudo systemctl restart nginx
+  498  npm run build
+  499  sudo systemctl restart nginx
+  500  npm run build
+  501  sudo systemctl restart nginx
+  502  npm run build
+  503  sudo systemctl restart nginx
+  504  npm run build
+  505  sudo systemctl restart nginx
+  506  npm run build
+  507  sudo systemctl restart nginx
+  508  npm run build
+  509  sudo systemctl restart nginx
+  510  npm run build
+  511  sudo systemctl restart nginx
+  512  npm run build
+  513  sudo systemctl restart nginx
+  514  npm run build
+  515  sudo systemctl restart nginx
+  516  cd /var/www/gamevault/client/frontend/
+  517  npm run build
+  518  cd /var/www/gamevault/client/frontend/
+  519  sudo systemctl restart nginx
+  520  npx shadcn-ui@latest add command
+  521  npx shadcn@latest add command 
+  522  npx shadcn@latest add popover
+  523  npm run build
+  524  sudo systemctl restart nginx
+  525  npm run build
+  526  sudo systemctl restart nginx
+  527  npm run build
+  528  sudo systemctl restart nginx
+  529  npm run build
+  530  sudo systemctl restart nginx
+  531  npm run build
+  532  sudo systemctl restart nginx
+  533  npm run build
+  534  cd /var/www/gamevault/client/frontend/
+  535  npm run build
+  536  cd /var/www/gamevault/client/frontend/
+  537  sudo systemctl restart nginx
+  538  npm run build
+  539  sudo systemctl restart nginx
+  540  npm run build
+  541  sudo systemctl restart nginx
+  542  npm run build
+  543  sudo systemctl restart nginx
+  544  npm run build
+  545  sudo systemctl restart nginx
+  546  npm run build
+  547  sudo systemctl restart nginx
+  548  npm run build
+  549  sudo systemctl restart nginx
+  550  cd /var/www/gamevault/client/frontend/
+  551  npm run build
+  552  cd /var/www/gamevault/client/frontend/
+  553  sudo systemctl restart nginx
+  554  cd /var/www/gamevault/client/frontend/
+  555  npm run build
+  556  cd /var/www/gamevault/client/frontend/
+  557  sudo systemctl restart nginx
+  558  npm run build
+  559  sudo systemctl restart nginx
+  560  npm run build
+  561  sudo systemctl restart nginx
+  562  cd /var/www/gamevault/client/frontend/
+  563  npm run build
+  564  cd /var/www/gamevault/client/frontend/
+  565  sudo systemctl restart nginx
+  566  npm run build
+  567  sudo systemctl restart nginx
+  568  npm run build
+  569  sudo systemctl restart nginx
+  570  npm run build
+  571  sudo systemctl restart nginx
+  572  npm run build
+  573  sudo systemctl restart nginx
+  574  npm run build
+  575  sudo systemctl restart nginx
+  576  npm run build
+  577  sudo systemctl restart nginx
+  578  npm run build
+  579  sudo systemctl restart nginx
+  580  npm run build
+  581  sudo systemctl restart nginx
+  582  npm run build
+  583  sudo systemctl restart nginx
+  584  cd /var/www/gamevault/client/frontend/
+  585  npm install @tanstack/react-router
+  586  npm run build
+  587  sudo systemctl restart nginx
+  588  npm run build
+  589  sudo systemctl restart nginx
+  590  npm run build
+  591  sudo systemctl restart nginx
+  592  npm run build
+  593  sudo systemctl restart nginx
+  594  npm run build
+  595  sudo systemctl restart nginx
+  596  npm run build
+  597  sudo systemctl restart nginx
+  598  npm run build
+  599  sudo systemctl restart nginx
+  600  npm run build
+  601  sudo systemctl restart nginx
+  602  npm run build
+  603  sudo systemctl restart nginx
+  604  npm run build
+  605  sudo systemctl restart nginx
+  606  npm run build
+  607  sudo systemctl restart nginx
+  608  npm run build
+  609  sudo systemctl restart nginx
+  610  npm run build
+  611  sudo systemctl restart nginx
+  612  npm run build
+  613  sudo systemctl restart nginx
+  614  npm run build
+  615  sudo systemctl restart nginx
+  616  npm run build
+  617  sudo systemctl restart nginx
+  618  npm run build
+  619  sudo systemctl restart nginx
+  620  cd /var/www/gamevault/client/frontend/
+  621  npm run build
+  622  cd /var/www/gamevault/client/frontend/
+  623  sudo systemctl restart nginx
+  624  npm run build
+  625  sudo systemctl restart nginx
+  626  npm run build
+  627  sudo systemctl restart nginx
+  628  npm run build
+  629  sudo systemctl restart nginx
+  630  npm run build
+  631  sudo systemctl restart nginx
+  632  npm run build
+  633  sudo systemctl restart nginx
+  634  npm run build
+  635  sudo systemctl restart nginx
+  636  npm run build
+  637  sudo systemctl restart nginx
+  638  npm run build
+  639  sudo systemctl restart nginx
+  640  npm run build
+  641  sudo systemctl restart nginx
+  642  npm run build
+  643  sudo systemctl restart nginx
+  644  npm run build
+  645  sudo systemctl restart nginx
+  646  npm run build
+  647  sudo systemctl restart nginx
+  648  npm run build
+  649  sudo systemctl restart nginx
+  650  npm run build
+  651  sudo systemctl restart nginx
+  652  npm run build
+  653  sudo systemctl restart nginx
+  654  npm run build
+  655  sudo systemctl restart nginx
+  656  cd /var/www/gamevault/client/frontend/
+  657  npm run build
+  658  cd /var/www/gamevault/client/frontend/
+  659  sudo systemctl restart nginx
+  660  npm run build
+  661  sudo systemctl restart nginx
+  662  npm run build
+  663  sudo systemctl restart nginx
+  664  npm run build
+  665  sudo systemctl restart nginx
+  666  npm run build
+  667  sudo systemctl restart nginx
+  668  cd /var/www/gamevault/client/frontend/
+  669  npm run build
+  670  sudo systemctl restart nginx
+  671  npm run build
+  672  sudo systemctl restart nginx
+  673  cd /var/www/gamevault/client/frontend/
+  674  npm run build
+  675  cd /var/www/gamevault/client/frontend/
+  676  sudo systemctl restart nginx
+  677  cd /var/www/gamevault/client/frontend/
+  678  npm run build
+  679  cd /var/www/gamevault/client/frontend/
+  680  sudo systemctl restart nginx
+  681  cd /var/www/gamevault/client/frontend/
+  682  npm run build
+  683  sudo systemctl restart nginx
+  684  npm run build
+  685  sudo systemctl restart nginx
+  686  npm run build
+  687  sudo systemctl restart nginx
+  688  npm run build
+  689  sudo systemctl restart nginx
+  690  npm run build
+  691  sudo systemctl restart nginx
+  692  npm run build
+  693  sudo systemctl restart nginx
+  694  npm run build
+  695  sudo systemctl restart nginx
+  696  npm run build
+  697  sudo systemctl restart nginx
+  698  npm run build
+  699  sudo systemctl restart nginx
+  700  npm run build
+  701  sudo systemctl restart nginx
+  702  npm run build
+  703  sudo systemctl restart nginx
+  704  npm run build
+  705  sudo systemctl restart nginx
+  706  npm run build
+  707  sudo systemctl restart nginx
+  708  cd /var/www/gamevault/client/frontend/
+  709  cd /var/www/gamevault/client/frontend/
+  710  npm run build
+  711  cd /var/www/gamevault/client/frontend/
+  712  sudo systemctl restart nginx
+  713  npm run build
+  714  sudo systemctl restart nginx
+  715  npm run build
+  716  sudo systemctl restart nginx
+  717  npm run build
+  718  sudo systemctl restart nginx
+  719  npm run build
+  720  sudo systemctl restart nginx
+  721  npm run build
+  722  sudo systemctl restart nginx
+  723  npm run build
+  724  sudo systemctl restart nginx
+  725  npm run build
+  726  sudo systemctl restart nginx
+  727  npm run build
+  728  sudo systemctl restart nginx
+  729  npm run build
+  730  sudo systemctl restart nginx
+  731  npm run build
+  732  sudo systemctl restart nginx
+  733  npm run build
+  734  sudo systemctl restart nginx
+  735  npm run build
+  736  sudo systemctl restart nginx
+  737  npm run build
+  738  sudo systemctl restart nginx
+  739  npm run build
+  740  sudo systemctl restart nginx
+  741  npm run build
+  742  sudo systemctl restart nginx
+  743  npm run build
+  744  sudo systemctl restart nginx
+  745  npm run build
+  746  sudo systemctl restart nginx
+  747  npm run build
+  748  sudo systemctl restart nginx
+  749  npm run build
+  750  sudo systemctl restart nginx
+  751  cd /var/www/gamevault/client/frontend/
+  752  npm run build
+  753  sudo systemctl restart nginx
+  754  npm run build
+  755  sudo systemctl restart nginx
+  756  npm run build
+  757  sudo systemctl restart nginx
+  758  npm run build
+  759  sudo systemctl restart nginx
+  760  npm run build
+  761  sudo systemctl restart nginx
+  762  npm run build
+  763  sudo systemctl restart nginx
+  764  npm run build
+  765  sudo systemctl restart nginx
+  766  npm run build
+  767  sudo systemctl restart nginx
+  768  npm run build
+  769  sudo systemctl restart nginx
+  770  npm run build
+  771  sudo systemctl restart nginx
+  772  npm run build
+  773  sudo systemctl restart nginx
+  774  npm run build
+  775  sudo systemctl restart nginx
+  776  npm install @tanstack/react-virtual
+  777  sudo systemctl restart nginx
+  778  npm run build
+  779  sudo systemctl restart nginx
+  780  npm run build
+  781  sudo systemctl restart nginx
+  782  npm run build
+  783  sudo systemctl restart nginx
+  784  npm run build
+  785  sudo systemctl restart nginx
+  786  npm run build
+  787  sudo systemctl restart nginx
+  788  npm run build
+  789  sudo systemctl restart nginx
+  790  npm run build
+  791  sudo systemctl restart nginx
+  792  npm run build
+  793  sudo systemctl restart nginx
+  794  npm run build
+  795  sudo systemctl restart nginx
+  796  npm run build
+  797  sudo systemctl restart nginx
+  798  npm run build
+  799  sudo systemctl restart nginx
+  800  npm run build
+  801  sudo systemctl restart nginx
+  802  npm run build
+  803  sudo systemctl restart nginx
+  804  npm run build
+  805  sudo systemctl restart nginx
+  806  npm run build
+  807  sudo systemctl restart nginx
+  808  npm run build
+  809  sudo systemctl restart nginx
+  810  npm run build
+  811  sudo systemctl restart nginx
+  812  npm run build
+  813  sudo systemctl restart nginx
+  814  npm run build
+  815  sudo systemctl restart nginx
+  816  npm run build
+  817  sudo systemctl restart nginx
+  818  cd /var/www/gamevault/client/frontend/
+  819  npm install react-virtuoso
+  820  import React, { useState, useEffect, useMemo } from "react";
+  821  import { Game, CartItem, FilterState } from "../../types";
+  822  import { resolveImageUrl } from "../../constants";
+  823  import { Link } from '@tanstack/react-router';
+  824  import { Virtuoso, VirtuosoGrid, Components } from 'react-virtuoso';
+  825  import {
+  826  } from "lucide-react";
+  827  import { useLanguage } from '../../config/language';
+  828  import { cn } from '../../lib/utils';
+  829  import { Button } from "@/components/ui/button";
+  830  import bannerImg from '../../assets/bg.jpg'
+  831  // --- 1. News Banner Component ---
+  832  const NewsBanner = React.memo(({ t }: { t: (k: string) => string }) => {
+  833  });
+  834  // --- 2. Game Card Component ---
+  835  const MemoizedGameCard = React.memo(
+  836  cd /var/www/gamevault/client/frontend/
+  837  const MemoizedGameCard = React.memo(
+  838  npm run build
+  839  sudo systemctl restart nginx
+  840  npm install react-virtuoso
+  841  npm run build
+  842  sudo systemctl restart nginx
+  843  npm run build
+  844  sudo systemctl restart nginx
+  845  npm run build
+  846  sudo systemctl restart nginx
+  847  npm run build
+  848  sudo systemctl restart nginx
+  849  npm run build
+  850  sudo systemctl restart nginx
+  851  npm run build
+  852  sudo systemctl restart nginx
+  853  npm run build
+  854  sudo systemctl restart nginx
+  855  npm run build
+  856  sudo systemctl restart nginx
+  857  npm run build
+  858  sudo systemctl restart nginx
+  859  npm run build
+  860  sudo systemctl restart nginx
+  861  npm run build
+  862  sudo systemctl restart nginx
+  863  npm run build
+  864  sudo systemctl restart nginx
+  865  npm run build
+  866  sudo systemctl restart nginx
+  867  npm run build
+  868  sudo systemctl restart nginx
+  869  npm run build
+  870  sudo systemctl restart nginx
+  871  npm run build
+  872  sudo systemctl restart nginx
+  873  npm run build
+  874  sudo systemctl restart nginx
+  875  npm run build
+  876  sudo systemctl restart nginx
+  877  npm run build
+  878  sudo systemctl restart nginx
+  879  npm run build
+  880  sudo systemctl restart nginx
+  881  npm run build
+  882  sudo systemctl restart nginx
+  883  npm run build
+  884  sudo systemctl restart nginx
+  885  npm run build
+  886  sudo systemctl restart nginx
+  887  npm run build
+  888  sudo systemctl restart nginx
+  889  cd /var/www/gamevault/client/frontend/
+  890  npm run build
+  891  cd /var/www/gamevault/client/frontend/
+  892  sudo systemctl restart nginx
+  893  cd /var/www/gamevault/client/frontend/
+  894  npm run build
+  895  cd /var/www/gamevault/client/frontend/
+  896  sudo systemctl restart nginx
+  897  cd /var/www/gamevault/client/frontend/
+  898  npm run build
+  899  cd /var/www/gamevault/client/frontend/
+  900  sudo systemctl restart nginx
+  901  npm run build
+  902  sudo systemctl restart nginx
+  903  npm run build
+  904  sudo systemctl restart nginx
+  905  npm run build
+  906  sudo systemctl restart nginx
+  907  npm run build
+  908  sudo systemctl restart nginx
+  909  npm run build
+  910  sudo systemctl restart nginx
+  911  npm run build
+  912  sudo systemctl restart nginx
+  913  npm run build
+  914  sudo systemctl restart nginx
+  915  npm run build
+  916  sudo systemctl restart nginx
+  917  npm run build
+  918  sudo systemctl restart nginx
+  919  npm run build
+  920  sudo systemctl restart nginx
+  921  npm run build
+  922  sudo systemctl restart nginx
+  923  npm run build
+  924  sudo systemctl restart nginx
+  925  npm run build
+  926  sudo systemctl restart nginx
+  927  npm run build
+  928  sudo systemctl restart nginx
+  929  npm run build
+  930  sudo systemctl restart nginx
+  931  npm run build
+  932  sudo systemctl restart nginx
+  933  npm run build
+  934  sudo systemctl restart nginx
+  935  npm run build
+  936  sudo systemctl restart nginx
+  937  npm run build
+  938  sudo systemctl restart nginx
+  939  npm run build
+  940  sudo systemctl restart nginx
+  941  npm run build
+  942  sudo systemctl restart nginx
+  943  npm run build
+  944  sudo systemctl restart nginx
+  945  npm run build
+  946  sudo systemctl restart nginx
+  947  npm run build
+  948  sudo systemctl restart nginx
+  949  npm run build
+  950  sudo systemctl restart nginx
+  951  npm run build
+  952  sudo systemctl restart nginx
+  953  npm run build
+  954  sudo systemctl restart nginx
+  955  cd /var/www/gamevault/client/frontend/
+  956  npm install react@latest react-dom@latest
+  957  npm run build
+  958  sudo systemctl restart nginx
+  959  # Source - https://stackoverflow.com/a/20297747
+  960  # Posted by user2445124
+  961  # Retrieved 2026-03-16, License - CC BY-SA 3.0
+  962  history >> file.txt
+  963  ls
+  964  sudo nano file.txt
+  965  rm file.txt 
+  966  sudo nano file.txt
+  967  history >> file.txt

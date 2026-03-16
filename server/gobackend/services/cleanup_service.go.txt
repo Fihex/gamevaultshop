@@ -1,0 +1,121 @@
+package services
+
+import (
+	"fmt"
+	"gamevault/database"
+	"gamevault/models"
+	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
+	"time"
+)
+
+// StartCleanupTask initializes the background job
+func StartCleanupTask() {
+	// 1. CHECK THE TOGGLE SWITCH
+	envVal := os.Getenv("APP_IMAGES_CLEANUP_ENABLED")
+
+	// Default to FALSE (Off)
+	isEnabled := false
+
+	// Only set to true if the environment variable explicitly says "true" or "1"
+	if envVal != "" {
+		if val, err := strconv.ParseBool(envVal); err == nil {
+			isEnabled = val
+		}
+	}
+
+	if !isEnabled {
+		fmt.Println("--- [CRON] Orphaned File Cleanup is DISABLED (Default). To enable, set CLEANUP_ENABLED=true ---")
+		return // Exit function, do not start the ticker
+	}
+
+	fmt.Println("--- [CRON] Orphaned File Cleanup Service Started (Runs every 24h) ---")
+
+	// 2. Start the Ticker (runs every 24 hours)
+	ticker := time.NewTicker(24 * time.Hour)
+
+	// Run in background using cleaner 'for range' syntax
+	go func() {
+		cleanOrphanedFiles()
+		// This replaces the old 'for { select { ... } }' block
+		for range ticker.C {
+			cleanOrphanedFiles()
+		}
+	}()
+}
+
+func cleanOrphanedFiles() {
+	fmt.Println("--- [CRON] Scanning for orphaned files... ---")
+
+	// Get all games, but ONLY fetch the 'images' column for performance
+	var games []models.Game
+	if err := database.DB.Select("images").Find(&games).Error; err != nil {
+		fmt.Printf("[CRON] Error fetching games: %v\n", err)
+		return
+	}
+
+	// Create a lookup map of all images currently in use
+	validFiles := make(map[string]bool)
+	for _, game := range games {
+		for _, imgUrl := range game.Images {
+			// Extract filename from URL (e.g. "/api/images/uuid.jpg" -> "uuid.jpg")
+			parts := strings.Split(imgUrl, "/")
+			if len(parts) > 0 {
+				filename := parts[len(parts)-1]
+				validFiles[filename] = true
+			}
+		}
+	}
+
+	// Define uploads directory
+	// Note: Relies on Systemd WorkingDirectory being set correctly!
+	uploadsDir := "uploads"
+
+	files, err := os.ReadDir(uploadsDir)
+	if err != nil {
+		// Silent fail if folder doesn't exist yet
+		return
+	}
+
+	deletedCount := 0
+
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
+		filename := file.Name()
+
+		// If file is NOT in the database list
+		if _, exists := validFiles[filename]; !exists {
+
+			info, err := file.Info()
+			if err != nil {
+				continue
+			}
+
+			// SAFETY CHECK: Only delete if older than 24 hours
+			if time.Since(info.ModTime()) > 24*time.Hour {
+
+				fullPath := filepath.Join(uploadsDir, filename)
+
+				fmt.Printf("[CRON] Deleting orphan: %s\n", filename)
+
+				err := os.Remove(fullPath)
+				if err != nil {
+					fmt.Printf("[CRON] Failed to delete: %v\n", err)
+				} else {
+					deletedCount++
+				}
+			}
+		}
+	}
+
+	if deletedCount > 0 {
+		fmt.Printf("--- [CRON] Cleanup Finished. Deleted %d files. ---\n", deletedCount)
+	} else {
+		fmt.Println("--- [CRON] Cleanup Finished. No files needed deletion. ---")
+	}
+}
